@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Request, Response } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -21,8 +24,12 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(@Req() req: Request, @Res() res: Response) {
+    const users = await this.usersService.findAll();
+    if (users.length === 0) {
+      return res.status(404).send({ message: 'No users found' });
+    }
+    return res.send(users);
   }
 
   @Get(':id')
@@ -42,9 +49,6 @@ export class UsersController {
 
   @Get('insert-sample-data')
   insertSampleData() {
-    console.log('masuk sini');
-    const result = this.usersService.insertSampleData();
-    console.log('result:', result);
-    return result;
+    return this.usersService.insertSampleData();
   }
 }

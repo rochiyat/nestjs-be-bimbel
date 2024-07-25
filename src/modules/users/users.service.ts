@@ -17,7 +17,7 @@ export class UsersService {
     return this.usersRepository.save(newUser);
   }
 
-  findAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
 
@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   async remove(id: number): Promise<void> {
-    return this.usersRepository.delete({ where: { user_id: id } }).then();
+    return this.usersRepository.delete(id).then();
   }
 
   async insertSampleData(): Promise<void> {
